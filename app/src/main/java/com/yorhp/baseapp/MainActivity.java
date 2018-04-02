@@ -88,12 +88,24 @@ public class MainActivity extends BaseActivity {
             Thread.sleep(200);
             nameList.add("权限工具测试");
             stringAdapter.addOne(nameList.size() - 1);
-            Thread.sleep(200);
             nameList.add("相机工具测试");
             stringAdapter.addOne(nameList.size() - 1);
             nameList.add("底部弹窗工具测试");
             nameList.add("SnackBar工具测试");
             nameList.add("停止SnackBar");
+            nameList.add("Toast工具测试");
+            nameList.add("图片加载工具");
+            nameList.add("EventBus");
+            nameList.add("数据库");
+            nameList.add("属性动画测试");
+            nameList.add("界面切换动画测试");
+            nameList.add("Activity元素共享测试");
+            nameList.add("控件剪裁测试");
+            nameList.add("状态栏颜色测试");
+            nameList.add("发送邮件测试");
+            nameList.add("电话号码测试");
+            nameList.add("语音录制");
+            nameList.add("视频播放器");
             stringAdapter.update();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -128,6 +140,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case 5:
                 SnackbarUtil.ShortSnackbar(rcyl_test,"OK",SnackbarUtil.Info).show();
+                break;
+            case 6:
+                toast("嗨，你好呀");
                 break;
         }
     }

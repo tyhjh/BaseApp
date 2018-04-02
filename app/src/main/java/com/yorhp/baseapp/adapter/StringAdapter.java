@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.yorhp.baseapp.R;
@@ -44,6 +45,13 @@ public class StringAdapter extends BaseRecyclerAdapter {
         final StringHolder stringHolder = (StringHolder) holder;
         lastPosition = position;
         stringHolder.textView.setText(arrayList.get(holder.getPosition()));
+
+        if(position<9){
+            stringHolder.checkBox.setChecked(true);
+        }else {
+            stringHolder.checkBox.setChecked(false);
+        }
+
         stringHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,10 +69,11 @@ public class StringAdapter extends BaseRecyclerAdapter {
 
     class StringHolder extends RecyclerView.ViewHolder {
         TextView textView;
-
+        CheckBox checkBox;
         public StringHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.tv_name);
+            checkBox=itemView.findViewById(R.id.ckb);
         }
     }
 }
