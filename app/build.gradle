@@ -29,6 +29,6 @@ dependencies {
     implementation project(':tyhjlibrary')
 
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    api "org.androidannotations:androidannotations-api:$AAVersion"
 
 }

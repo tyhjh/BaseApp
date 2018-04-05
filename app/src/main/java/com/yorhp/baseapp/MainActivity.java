@@ -97,6 +97,8 @@ public class MainActivity extends BaseActivity {
             nameList.add("图片加载工具");
             nameList.add("EventBus");
             nameList.add("数据库");
+            nameList.add("屏幕信息");
+            nameList.add("网络监听");
             nameList.add("属性动画测试");
             nameList.add("界面切换动画测试");
             nameList.add("Activity元素共享测试");
@@ -106,6 +108,7 @@ public class MainActivity extends BaseActivity {
             nameList.add("电话号码测试");
             nameList.add("语音录制");
             nameList.add("视频播放器");
+            nameList.add("语音播放");
             stringAdapter.update();
         } catch (InterruptedException e) {
             e.printStackTrace();
