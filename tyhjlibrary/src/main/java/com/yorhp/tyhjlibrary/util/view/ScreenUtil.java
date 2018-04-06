@@ -13,11 +13,15 @@ import com.yorhp.tyhjlibrary.app.MyApplication;
  */
 
 public class ScreenUtil {
+
+    public static int SCREEN_WIDTH=0;
+    public static int SCREEN_HEIGHT=0;
+
     //保存屏幕大小
     public static void getScreenSize(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        MyApplication.SCREEN_WIDTH = metrics.widthPixels;//获取到的是px，像素，绝对像素，需要转化为dpi
-        MyApplication.SCREEN_HEIGHT = getRealHeight(context);
+        SCREEN_WIDTH = metrics.widthPixels;//获取到的是px，像素，绝对像素，需要转化为dpi
+        SCREEN_HEIGHT = getRealHeight(context);
     }
 
     //获取正确的屏幕高度

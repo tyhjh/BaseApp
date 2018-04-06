@@ -42,7 +42,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        if (MyApplication.SCREEN_WIDTH == 0) {
+        if (ScreenUtil.SCREEN_WIDTH == 0) {
             ScreenUtil.getScreenSize(this);
         }
         MyApplication.activities.add(this);
@@ -87,6 +87,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        camerabakListener=setCamerabakListener();
         // 拒绝时, 关闭页面, 缺少主要权限, 无法运行
         if (requestCode == PERMISSIONS_REQUEST_CODE && resultCode == PermissionsActivity.PERMISSIONS_DENIED) {
             requestPermissionFail();
@@ -168,5 +169,8 @@ public class BaseActivity extends AppCompatActivity {
         MyApplication.activities.remove(this);
     }
 
-
+    //设置图片获取监听
+    protected CameraUtil.CamerabakListener setCamerabakListener() {
+        return null;
+    }
 }

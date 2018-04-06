@@ -180,7 +180,7 @@ public class CameraUtil {
                 if (resultCode == RESULT_OK) {
                     String fileName = CameraUtil.path + "/" + CameraUtil.date;
                     File newFile = new File(CameraUtil.path, CameraUtil.date);
-                    FileUtil.ImgCompress(fileName, newFile, 500, 500, 300);
+                    FileUtil.ImgCompress(fileName, newFile, 500, 500, 400);
                     //获取到的就是new File或fileName
                     getFile.getFile(newFile);
                 }

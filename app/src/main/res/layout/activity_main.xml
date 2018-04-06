@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.yorhp.baseapp.MainActivity">
+    tools:context="com.yorhp.baseapp.view.MainActivity">
 
-    <com.yorhp.tyhjlibrary.view.recycleView.MRecycleView
-        android:paddingTop="10dp"
-        android:clipToPadding="false"
-        android:overScrollMode="always"
-        android:id="@+id/rcyl_test"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.yorhp.tyhjlibrary.view.recycleView.MRecycleView
+            android:paddingTop="10dp"
+            android:clipToPadding="false"
+            android:overScrollMode="always"
+            android:id="@+id/rcyl_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.yorhp.tyhjlibrary.view.recycleView.MRecycleView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.yorhp.tyhjlibrary.view.recycleView.MRecycleView>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_outlin"
+            android:elevation="2dp"
+            android:layout_gravity="center"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

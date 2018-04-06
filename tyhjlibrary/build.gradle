@@ -52,9 +52,10 @@ dependencies {
     api 'com.android.support:support-v4:26.1.0'
 
     api 'com.squareup.picasso:picasso:2.71828'
-    implementation files('libs/lite-orm-1.9.2.jar')
+    api files('libs/lite-orm-1.9.2.jar')
 
     api 'org.greenrobot:eventbus:3.1.1'
+
 
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
     api "org.androidannotations:androidannotations-api:$AAVersion"

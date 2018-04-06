@@ -24,8 +24,6 @@ public class MyApplication extends Application {
     public static int PHONERAND = 0;
 
     public static String APP_BASE_DIR = "";
-    public static int SCREEN_WIDTH=0;
-    public static int SCREEN_HEIGHT=0;
     public static ArrayList<Activity> activities = new ArrayList<>();
     public static final boolean ISDEBUG = true;
 
@@ -48,6 +46,7 @@ public class MyApplication extends Application {
         initDir();
         initPicasso();
     }
+
 
     /**
      * 初始化Picasso
