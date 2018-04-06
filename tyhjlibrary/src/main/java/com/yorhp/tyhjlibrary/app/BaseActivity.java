@@ -101,7 +101,7 @@ public class BaseActivity extends AppCompatActivity {
         }else if((requestCode == PICK_PHOTO||requestCode ==CROP_PHOTO||requestCode ==TAKE_PHOTO)&&camerabakListener!=null){
             camerabakListener=setCamerabakListener();
             CameraUtil.getPhoto(requestCode, resultCode, this, data,camerabakListener);
-        }else if(requestCode==TAKE_VIDEO){
+        }else if(requestCode==TAKE_VIDEO&&resultCode==RESULT_OK){
             //视频返回数据
             String path=data.getStringExtra("videoPath");
             if(path!=null)

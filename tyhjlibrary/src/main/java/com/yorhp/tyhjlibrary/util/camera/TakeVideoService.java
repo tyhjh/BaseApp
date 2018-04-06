@@ -104,8 +104,8 @@ public class TakeVideoService extends Service {
 
 
         //设置悬浮窗口长宽数据
-        wmParams.width = 20;
-        wmParams.height = 20;
+        wmParams.width = 200;
+        wmParams.height = 200;
 
         videoFloat=new AutoFitTextureView(context);
         windowManager.addView(videoFloat, wmParams);
