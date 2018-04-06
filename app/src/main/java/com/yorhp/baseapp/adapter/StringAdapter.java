@@ -46,7 +46,7 @@ public class StringAdapter extends BaseRecyclerAdapter {
         lastPosition = position;
         stringHolder.textView.setText(arrayList.get(holder.getPosition()));
 
-        if(position<12){
+        if(position<14){
             stringHolder.checkBox.setChecked(true);
         }else {
             stringHolder.checkBox.setChecked(false);

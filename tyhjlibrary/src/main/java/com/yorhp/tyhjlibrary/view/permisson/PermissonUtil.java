@@ -2,17 +2,13 @@ package com.yorhp.tyhjlibrary.view.permisson;
 
 import android.app.Activity;
 
+import static com.yorhp.tyhjlibrary.app.BaseActivity.PERMISSIONS_REQUEST_CODE;
+
 /**
  * Created by Tyhj on 2018/4/2.
  */
 
 public class PermissonUtil {
-    public static final int PERMISSIONS_REQUEST_CODE = 0; // 请求码
-    public static final int TAKE_PHOTO = 1;
-    public static final int CROP_PHOTO = 2;
-    public static final int PICK_PHOTO = 3;
-
-
 
     public static PermissionsChecker mPermissionsChecker; // 权限检测器
 

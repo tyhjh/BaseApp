@@ -1,10 +1,13 @@
 package com.yorhp.baseapp.view;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +19,8 @@ import com.yorhp.baseapp.model.AppRecord;
 import com.yorhp.tyhjlibrary.app.BaseActivity;
 import com.yorhp.tyhjlibrary.app.MyApplication;
 import com.yorhp.tyhjlibrary.util.camera.CameraUtil;
+import com.yorhp.tyhjlibrary.util.camera.ShootVideoActivity_;
+import com.yorhp.tyhjlibrary.util.camera.TakeVideoService;
 import com.yorhp.tyhjlibrary.util.common.LogUtils;
 import com.yorhp.tyhjlibrary.util.database.MLiteOrm;
 import com.yorhp.tyhjlibrary.util.internet.InternetUtil;
@@ -23,6 +28,7 @@ import com.yorhp.tyhjlibrary.util.view.ImageUtil;
 import com.yorhp.tyhjlibrary.util.view.ScreenUtil;
 import com.yorhp.tyhjlibrary.view.dialog.BottomFragment;
 import com.yorhp.tyhjlibrary.view.dialog.MyDialog;
+import com.yorhp.tyhjlibrary.view.permisson.FloatWindowManager;
 import com.yorhp.tyhjlibrary.view.permisson.PermissonUtil;
 import com.yorhp.tyhjlibrary.view.recycleView.MRecycleView;
 import com.yorhp.tyhjlibrary.view.toast.SnackbarUtil;
@@ -66,16 +72,17 @@ public class MainActivity extends BaseActivity {
     @ViewById
     Button btn_outlin;
 
-    int state=0;
+    int state = 0;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Click
     void btn_outlin() {
-        if (state==0) {
+        if (state == 0) {
             btn_outlin.setOutlineProvider(ImageUtil.getOutline(false, 10, 10));
-            state=1;
-        }else {
+            state = 1;
+        } else {
             btn_outlin.setOutlineProvider(ImageUtil.getOutline(true, 10, 10));
-            state=0;
+            state = 0;
         }
     }
 
@@ -83,6 +90,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         logTime = System.currentTimeMillis();
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+       // startActivity(intent);
+
     }
 
     @AfterViews
@@ -119,7 +129,8 @@ public class MainActivity extends BaseActivity {
             nameList.add("屏幕信息");
             nameList.add("网络监听");
             nameList.add("控件剪裁测试");
-            nameList.add("属性动画测试");
+            nameList.add("录像工具测试");
+            nameList.add("后台录像工具测试");
             nameList.add("界面切换动画测试");
             nameList.add("Activity元素共享测试");
             nameList.add("状态栏颜色测试");
@@ -211,7 +222,7 @@ public class MainActivity extends BaseActivity {
                         toast("当前网络为：" + InternetUtil.getNetWorkStatus(this));
                 }
                 break;
-            case 12:
+            case 12://控件剪裁
                 if (!btn_outlin.isShown()) {
                     btn_outlin.setVisibility(View.VISIBLE);
                     btn_outlin.setClipToOutline(true);
@@ -220,11 +231,12 @@ public class MainActivity extends BaseActivity {
                     btn_outlin.setVisibility(View.GONE);
                 }
                 break;
-            case 13:
-                toast("嗨，你好呀");
+            case 13://录制视频
+                lvForSomething(ShootVideoActivity_.class, BaseActivity.TAKE_VIDEO);
                 break;
-            case 14:
-                toast("嗨，你好呀");
+            case 14://后台录像
+                if (FloatWindowManager.getInstance().applyOrShowFloatWindow(this)&&PermissonUtil.checkPermission(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO}))
+                    startService(new Intent(this, TakeVideoService.class));
                 break;
             case 15:
                 toast("嗨，你好呀");
@@ -232,6 +244,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
+    @Override
+    protected void takeVideo(String videoPath) {
+        snkbar(rcyl_test, "视频保存地址为：" + videoPath, Snackbar.LENGTH_LONG);
+    }
 
     @Override
     protected CameraUtil.CamerabakListener setCamerabakListener() {
@@ -283,4 +300,6 @@ public class MainActivity extends BaseActivity {
         }
         MyApplication.closeAllActivity();
     }
+
+
 }

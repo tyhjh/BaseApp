@@ -5,4 +5,17 @@
     <string name="string_help_text">当前应用缺少必要权限。\n请点击\"设置\"-\"权限\"-打开所需权限。</string>
     <string name="quit">取消</string>
     <string name="settings">设置</string>
+    <string name="record">录制</string>
+    <string name="permission_request">This sample needs permission for camera and audio recording.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="stop">Stop</string>
+    <string name="intro_message">
+        <![CDATA[
+
+
+            This sample demonstrates how to record video using Camera2 API.
+
+
+        ]]>
+    </string>
 </resources>

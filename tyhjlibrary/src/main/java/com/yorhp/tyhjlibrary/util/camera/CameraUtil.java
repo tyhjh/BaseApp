@@ -27,7 +27,9 @@ import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.ACTION_GET_CONTENT;
-import static com.yorhp.tyhjlibrary.view.permisson.PermissonUtil.*;
+import static com.yorhp.tyhjlibrary.app.BaseActivity.CROP_PHOTO;
+import static com.yorhp.tyhjlibrary.app.BaseActivity.PICK_PHOTO;
+import static com.yorhp.tyhjlibrary.app.BaseActivity.TAKE_PHOTO;
 
 /**
  * Created by Tyhj on 2017/8/29.
