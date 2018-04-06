@@ -66,7 +66,6 @@ public class MainActivity extends BaseActivity {
     @ViewById
     Button btn_outlin;
 
-
     int state=0;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Click
