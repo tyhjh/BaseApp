@@ -457,8 +457,8 @@ public class TakeVideoUtil {
             mNextVideoAbsolutePath = getVideoFilePath(context);
         }
         mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
-        mMediaRecorder.setVideoEncodingBitRate(10000000);
-        mMediaRecorder.setVideoFrameRate(30);
+        mMediaRecorder.setVideoEncodingBitRate(5000000);
+        mMediaRecorder.setVideoFrameRate(20);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
@@ -494,7 +494,6 @@ public class TakeVideoUtil {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void startRecordingVideo(Context context) {
-        Size size=mPreviewSize;
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -558,6 +557,13 @@ public class TakeVideoUtil {
     public void stopRecordingVideo() {
         // UI
         mIsRecordingVideo = false;
+
+        try {
+            mPreviewSession.stopRepeating();
+            mPreviewSession.abortCaptures();
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
 
         // Stop recording
         mMediaRecorder.stop();

@@ -20,6 +20,7 @@ import com.yorhp.tyhjlibrary.app.BaseActivity;
 import com.yorhp.tyhjlibrary.app.MyApplication;
 import com.yorhp.tyhjlibrary.util.camera.CameraUtil;
 import com.yorhp.tyhjlibrary.util.camera.ShootVideoActivity_;
+import com.yorhp.tyhjlibrary.util.camera.TakeVideoCameraOne;
 import com.yorhp.tyhjlibrary.util.camera.TakeVideoService;
 import com.yorhp.tyhjlibrary.util.common.LogUtils;
 import com.yorhp.tyhjlibrary.util.database.MLiteOrm;
@@ -131,6 +132,7 @@ public class MainActivity extends BaseActivity {
             nameList.add("控件剪裁测试");
             nameList.add("录像工具测试");
             nameList.add("后台录像工具测试");
+            nameList.add("CAMERA 1工具测试");
             nameList.add("界面切换动画测试");
             nameList.add("Activity元素共享测试");
             nameList.add("状态栏颜色测试");
@@ -239,7 +241,8 @@ public class MainActivity extends BaseActivity {
                     startService(new Intent(this, TakeVideoService.class));
                 break;
             case 15:
-                toast("嗨，你好呀");
+                if (FloatWindowManager.getInstance().applyOrShowFloatWindow(this)&&PermissonUtil.checkPermission(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO}))
+                    startActivity(new Intent(this, TakeVideoCameraOne.class));
                 break;
         }
     }
