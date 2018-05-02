@@ -1,14 +1,16 @@
 package com.yorhp.tyhjlibrary.util.file;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.view.View;
-
 
 import com.yorhp.tyhjlibrary.app.MyApplication;
 
@@ -222,5 +224,17 @@ public class FileUtil {
         return time;
     }
 
+
+    public static void openDIr(Context context, String url) {
+        File file = new File(url);
+        //获取父目录
+        File parentFlie = new File(file.getParent());
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uriForFile = FileProvider.getUriForFile(context, "com.yorhp.fileProvider", parentFlie);
+        intent.setDataAndType(uriForFile, "file/*");
+        context.startActivity(intent);
+    }
 
 }

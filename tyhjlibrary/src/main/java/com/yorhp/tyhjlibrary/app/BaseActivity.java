@@ -36,7 +36,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CROP_PHOTO = 2;
     public static final int PICK_PHOTO = 3;
-    public static final int TAKE_VIDEO=4;
+    public static final int TAKE_VIDEO = 4;
 
     protected CameraUtil.CamerabakListener camerabakListener;
 
@@ -52,7 +52,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @UiThread
     protected void toast(String msg) {
-        ToastUtil.toast(this,msg);
+        ToastUtil.toast(this, msg);
     }
 
     @UiThread
@@ -67,8 +67,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @UiThread
-    protected void lvForSomething(Class activity,int requestCode){
-        startActivityForResult(new Intent(this, activity),requestCode);
+    protected void lvForSomething(Class activity, int requestCode) {
+        startActivityForResult(new Intent(this, activity), requestCode);
     }
 
     @UiThread
@@ -83,34 +83,36 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    protected Context getContext(){
+    protected Context getContext() {
         return this;
     }
 
-    protected void requestPermissionFail(){
+    protected void requestPermissionFail() {
         toast("获取权限失败");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
         // 拒绝时, 关闭页面, 缺少主要权限, 无法运行
         if (requestCode == PERMISSIONS_REQUEST_CODE && resultCode == PermissionsActivity.PERMISSIONS_DENIED) {
             requestPermissionFail();
             //相机返回数据
-        }else if((requestCode == PICK_PHOTO||requestCode ==CROP_PHOTO||requestCode ==TAKE_PHOTO)&&camerabakListener!=null){
-            camerabakListener=setCamerabakListener();
-            CameraUtil.getPhoto(requestCode, resultCode, this, data,camerabakListener);
-        }else if(requestCode==TAKE_VIDEO&&resultCode==RESULT_OK){
+        } else if ((requestCode == PICK_PHOTO || requestCode == CROP_PHOTO || requestCode == TAKE_PHOTO)) {
+            camerabakListener = setCamerabakListener();
+            if (camerabakListener != null)
+                CameraUtil.getPhoto(requestCode, resultCode, this, data, camerabakListener);
+        } else if (requestCode == TAKE_VIDEO && resultCode == RESULT_OK) {
             //视频返回数据
-            String path=data.getStringExtra("videoPath");
-            if(path!=null)
+            String path = data.getStringExtra("videoPath");
+            if (path != null)
                 takeVideo(path);
         }
     }
 
 
-    protected void takeVideo(String videoPath){
+    protected void takeVideo(String videoPath) {
 
     }
 

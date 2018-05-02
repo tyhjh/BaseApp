@@ -81,6 +81,8 @@ public class TakeVideoUtil {
 
     Context context;
 
+    private String filePath;
+
     public void setContext(Context context) {
         this.context = context;
     }
@@ -448,7 +450,7 @@ public class TakeVideoUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void setUpMediaRecorder(Context context) throws IOException {
+    public void setUpMediaRecorder(Context context,String name) throws IOException {
 
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
@@ -492,15 +494,23 @@ public class TakeVideoUtil {
         }
     }
 
+
+    public String getFilePath() {
+        return filePath;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void startRecordingVideo(Context context) {
+    public void startRecordingVideo(Context context,String name) {
+
+        this.filePath=name;
+
         Size size=mPreviewSize;
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
         try {
             closePreviewSession();
-            setUpMediaRecorder(context);
+            setUpMediaRecorder(context,name);
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class MyApplication extends Application {
 
+    public static final String APP_NAME = "base_app_library";
     //手机品牌
     public static int PHONERAND = 0;
 
@@ -34,7 +35,7 @@ public class MyApplication extends Application {
 
 
     //API
-    public static String BASEURL="http://121.46.30.200:10081/mlstudio/";
+    public static String BASEURL = "http://121.46.30.200:10081/mlstudio/";
 
 
     @Override
@@ -52,24 +53,33 @@ public class MyApplication extends Application {
      * 初始化Picasso
      */
     private void initPicasso() {
-        Picasso picasso = new Picasso.Builder(getApplicationContext())
-                .memoryCache(new LruCache(10 << 20))//设置内存缓存大小10M
-                //.indicatorsEnabled(false) //设置左上角标记，主要用于测试
-                .build();
-        Picasso.setSingletonInstance(picasso);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Picasso picasso = new Picasso.Builder(getApplicationContext())
+                        .memoryCache(new LruCache(10 << 20))//设置内存缓存大小10M
+                        //.indicatorsEnabled(false) //设置左上角标记，主要用于测试
+                        .build();
+                Picasso.setSingletonInstance(picasso);
+            }
+        }).start();
     }
 
     /**
      * 文件夹初始化
      */
     public void initDir() {
-        File dir = new File(Environment.getExternalStorageDirectory() + "/" + getApplicationContext().getResources().getString(R.string.app_name));
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        APP_BASE_DIR = dir.getAbsolutePath();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File dir = new File(Environment.getExternalStorageDirectory() + "/" + getApplicationContext().getResources().getString(R.string.app_name));
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                APP_BASE_DIR = dir.getAbsolutePath();
+            }
+        }).start();
     }
-
 
 
     /**
@@ -84,6 +94,7 @@ public class MyApplication extends Application {
 
     /**
      * 主线程跑东西
+     *
      * @param runnable
      */
     public void runOnUiThread(Runnable runnable) {

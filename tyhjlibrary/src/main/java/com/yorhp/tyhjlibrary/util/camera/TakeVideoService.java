@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import com.yorhp.tyhjlibrary.app.MyApplication;
 import com.yorhp.tyhjlibrary.util.common.LogUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class TakeVideoService extends Service {
 
     public static WindowManager mWindowManager;
@@ -43,7 +45,7 @@ public class TakeVideoService extends Service {
                         @Override
                         public void run() {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                takeVideoUtil.startRecordingVideo(TakeVideoService.this);
+                                takeVideoUtil.startRecordingVideo(TakeVideoService.this,MyApplication.APP_BASE_DIR+"/movie/"+System.currentTimeMillis());
                             }
                         }
                     });
@@ -54,6 +56,7 @@ public class TakeVideoService extends Service {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 takeVideoUtil.stopRecordingVideo();
                                 mWindowManager.removeView(videoFloat);
+                                EventBus.getDefault().post(new String(takeVideoUtil.getFilePath()));
                                 stopSelf();
                             }
                         }

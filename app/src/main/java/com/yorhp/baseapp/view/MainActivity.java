@@ -1,16 +1,21 @@
 package com.yorhp.baseapp.view;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yorhp.baseapp.R;
@@ -21,13 +26,21 @@ import com.yorhp.tyhjlibrary.app.MyApplication;
 import com.yorhp.tyhjlibrary.util.camera.CameraUtil;
 import com.yorhp.tyhjlibrary.util.camera.ShootVideoActivity_;
 import com.yorhp.tyhjlibrary.util.camera.TakeVideoService;
+import com.yorhp.tyhjlibrary.util.common.FormatUtil;
 import com.yorhp.tyhjlibrary.util.common.LogUtils;
+import com.yorhp.tyhjlibrary.util.common.TimeUtil;
 import com.yorhp.tyhjlibrary.util.database.MLiteOrm;
+import com.yorhp.tyhjlibrary.util.email.EmailUtil;
+import com.yorhp.tyhjlibrary.util.file.FileUtil;
 import com.yorhp.tyhjlibrary.util.internet.InternetUtil;
+import com.yorhp.tyhjlibrary.util.phone.phoneUtil;
+import com.yorhp.tyhjlibrary.util.sound.RecordUtil;
 import com.yorhp.tyhjlibrary.util.view.ImageUtil;
 import com.yorhp.tyhjlibrary.util.view.ScreenUtil;
 import com.yorhp.tyhjlibrary.view.dialog.BottomFragment;
+import com.yorhp.tyhjlibrary.view.dialog.DialogUtil;
 import com.yorhp.tyhjlibrary.view.dialog.MyDialog;
+import com.yorhp.tyhjlibrary.view.dialog.PopupWindowFactory;
 import com.yorhp.tyhjlibrary.view.permisson.FloatWindowManager;
 import com.yorhp.tyhjlibrary.view.permisson.PermissonUtil;
 import com.yorhp.tyhjlibrary.view.recycleView.MRecycleView;
@@ -38,6 +51,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Touch;
 import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,6 +63,8 @@ import java.util.List;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
+
+    PopupWindowFactory mPop;
 
     public static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -72,6 +88,10 @@ public class MainActivity extends BaseActivity {
     @ViewById
     Button btn_outlin;
 
+
+    @ViewById
+    Button btn_record;
+
     int state = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -88,10 +108,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         logTime = System.currentTimeMillis();
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-       // startActivity(intent);
+        //Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        // startActivity(intent);
 
     }
 
@@ -107,6 +128,7 @@ public class MainActivity extends BaseActivity {
         });
         initData();
     }
+
 
     @Background
     void initData() {
@@ -131,12 +153,12 @@ public class MainActivity extends BaseActivity {
             nameList.add("控件剪裁测试");
             nameList.add("录像工具测试");
             nameList.add("后台录像工具测试");
+            nameList.add("发送邮件测试");
+            nameList.add("语音录制");
             nameList.add("界面切换动画测试");
             nameList.add("Activity元素共享测试");
             nameList.add("状态栏颜色测试");
-            nameList.add("发送邮件测试");
             nameList.add("电话号码测试");
-            nameList.add("语音录制");
             nameList.add("视频播放器");
             nameList.add("语音播放");
             stringAdapter.update();
@@ -179,69 +201,226 @@ public class MainActivity extends BaseActivity {
                 toast("嗨，你好呀");
                 break;
             case 7://图片加载
-                imageView = new ImageView(getContext());
-                MyDialog dialog = new MyDialog(getContext(), imageView, com.yorhp.tyhjlibrary.R.style.dialog2);
-                dialog.setCancelable(true);
-                dialog.show();
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Picasso.get().load("https://wallscover.com/images/fn-scarl-rifle-wallpaper-7.jpg").into(imageView);
+                showImage();
                 break;
             case 8://EventBus
                 toast("我在这里");
                 break;
             case 9://数据库
-                List<AppRecord> appRecordList = MLiteOrm.getInstance().query(AppRecord.class);
-                if (appRecordList.size() > 0)
-                    toast("你之前一共打开该APP" + appRecordList.size() + "次，最后一次打开时间为" +
-                            appRecordList.get(appRecordList.size() - 1).getLogTimeStr() +
-                            "，使用时间为：" + appRecordList.get(appRecordList.size() - 1).getSpendTimeStr());
-                else
-                    toast("未找到相关数据");
+                showDatabase();
                 break;
             case 10://屏幕数据
                 toast("屏幕分辨率为：" + ScreenUtil.SCREEN_HEIGHT + "x" + ScreenUtil.SCREEN_WIDTH);
                 break;
             case 11://网络监听
-                switch (InternetUtil.getNetWorkStatus(this)) {
-                    case InternetUtil.NETWORK_CLASS_4_G:
-                        toast("当前网络为：4G");
-                        break;
-                    case InternetUtil.NETWORK_CLASS_3_G:
-                        toast("当前网络为：3G");
-                        break;
-                    case InternetUtil.NETWORK_CLASS_2_G:
-                        toast("当前网络为：2G");
-                        break;
-                    case InternetUtil.NETWORK_WIFI:
-                        toast("当前网络为：WIFI");
-                        break;
-                    case InternetUtil.NETWORK_CLASS_UNKNOWN:
-                        toast("当前无网络");
-                        break;
-                    default:
-                        toast("当前网络为：" + InternetUtil.getNetWorkStatus(this));
-                }
+                internetStatus();
                 break;
             case 12://控件剪裁
-                if (!btn_outlin.isShown()) {
-                    btn_outlin.setVisibility(View.VISIBLE);
-                    btn_outlin.setClipToOutline(true);
-                    btn_outlin.setOutlineProvider(ImageUtil.getOutline(true, 10, 10));
-                } else {
-                    btn_outlin.setVisibility(View.GONE);
-                }
+                Outline();
                 break;
             case 13://录制视频
                 lvForSomething(ShootVideoActivity_.class, BaseActivity.TAKE_VIDEO);
                 break;
             case 14://后台录像
-                if (FloatWindowManager.getInstance().applyOrShowFloatWindow(this)&&PermissonUtil.checkPermission(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO}))
+                if (FloatWindowManager.getInstance().applyOrShowFloatWindow(this) &&
+                        PermissonUtil.checkPermission(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}))
                     startService(new Intent(this, TakeVideoService.class));
                 break;
-            case 15:
-                toast("嗨，你好呀");
+            case 15://邮件发送
+                sendEmail();
+                break;
+            case 16://语音录制
+                if (PermissonUtil.checkPermission(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE})) {
+                    record();
+                    if (btn_record.isShown())
+                        btn_record.setVisibility(View.GONE);
+                    else
+                        btn_record.setVisibility(View.VISIBLE);
+                }
+                break;
+            case 17://语音播放
+
                 break;
         }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(final String path){
+        Snackbar.make(rcyl_test,"视频保存在："+path,Snackbar.LENGTH_LONG).setAction("查看", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileUtil.openDIr(getBaseContext(),path);
+            }
+        }).show();
+    }
+
+    /**
+     * 语音录制
+     */
+    private void record() {
+        if (mPop != null) {
+            return;
+        }
+        final View view = View.inflate(this, R.layout.dialog_record, null);
+        final ImageView mImageView = (ImageView) view.findViewById(R.id.zeffect_recordbutton_dialog_imageview);
+        final TextView mTextView = (TextView) view.findViewById(R.id.zeffect_recordbutton_dialog_time_tv);
+        mPop = new PopupWindowFactory(this, view);
+        recordUtil = new RecordUtil();
+        recordUtil.setOnAudioStatusUpdateListener(new RecordUtil.OnAudioStatusUpdateListener() {
+            @Override
+            public void onUpdate(double db, long time) {
+                //根据分贝值来设置录音时话筒图标的上下波动，下面有讲解
+                mImageView.getDrawable().setLevel((int) (3000 + 6000 * db / 100));
+                mTextView.setText(TimeUtil.getTimeE(time).substring(14, 19));
+            }
+
+            @Override
+            public void onStop(final String filePath) {
+                Snackbar.make(rcyl_test, "语音保存路径为：" + filePath, Snackbar.LENGTH_SHORT).setAction("查看", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FileUtil.openDIr(getContext(),filePath);
+                    }
+                }).show();
+            }
+        });
+
+    }
+
+    float y;
+    long time;
+    RecordUtil recordUtil;
+
+    @Touch
+    void btn_record(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                y = event.getRawY();
+                time = System.currentTimeMillis();
+                mPop.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+                try {
+                    recordUtil.startRecord(this);
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                    Snackbar.make(btn_record, "先允许调用系统录音权限", Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (System.currentTimeMillis() - time < 1000) {
+                    Snackbar.make(btn_record, "录音时间过短，请重试", Snackbar.LENGTH_SHORT).show();
+                    recordUtil.cancelRecord(this);
+                    mPop.dismiss();
+                    break;
+                } else if (y - event.getRawY() > 300) {
+                    Snackbar.make(btn_record, "已取消录制语音", Snackbar.LENGTH_SHORT).show();
+                    recordUtil.cancelRecord(this);
+                    mPop.dismiss();
+                    break;
+                } else {
+                    try {
+                        recordUtil.stopRecord(this);        //结束录音（保存录音文件）
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        snkbar(btn_record, "先允许调用系统录音权限", Snackbar.LENGTH_SHORT);
+                    }
+                    mPop.dismiss();
+                    break;
+                }
+            case MotionEvent.ACTION_CANCEL:
+                recordUtil.cancelRecord(this); //取消录音（不保存录音文件）
+                mPop.dismiss();
+                break;
+        }
+    }
+
+    /**
+     * 控件剪裁
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void Outline() {
+        if (!btn_outlin.isShown()) {
+            btn_outlin.setVisibility(View.VISIBLE);
+            btn_outlin.setClipToOutline(true);
+            btn_outlin.setOutlineProvider(ImageUtil.getOutline(true, 10, 10));
+        } else {
+            btn_outlin.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 图片加载
+     */
+    private void showImage() {
+        ImageView imageView;
+        imageView = new ImageView(getContext());
+        final MyDialog dialog = new MyDialog(getContext(), imageView, com.yorhp.tyhjlibrary.R.style.dialog2);
+        dialog.setCancelable(true);
+        dialog.show();
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Picasso.get().load("https://wallscover.com/images/fn-scarl-rifle-wallpaper-7.jpg").into(imageView);
+    }
+
+    /**
+     * 数据库
+     */
+    private void showDatabase() {
+        List<AppRecord> appRecordList = MLiteOrm.getInstance().query(AppRecord.class);
+        if (appRecordList.size() > 0)
+            toast("你之前一共打开该APP" + appRecordList.size() + "次，最后一次打开时间为" +
+                    appRecordList.get(appRecordList.size() - 1).getLogTimeStr() +
+                    "，使用时间为：" + appRecordList.get(appRecordList.size() - 1).getSpendTimeStr());
+        else
+            toast("未找到相关数据");
+    }
+
+    /**
+     * 网络状态
+     */
+    private void internetStatus() {
+        switch (InternetUtil.getNetWorkStatus(this)) {
+            case InternetUtil.NETWORK_CLASS_4_G:
+                toast("当前网络为：4G");
+                break;
+            case InternetUtil.NETWORK_CLASS_3_G:
+                toast("当前网络为：3G");
+                break;
+            case InternetUtil.NETWORK_CLASS_2_G:
+                toast("当前网络为：2G");
+                break;
+            case InternetUtil.NETWORK_WIFI:
+                toast("当前网络为：WIFI");
+                break;
+            case InternetUtil.NETWORK_CLASS_UNKNOWN:
+                toast("当前无网络");
+                break;
+            default:
+                toast("当前网络为：" + InternetUtil.getNetWorkStatus(this));
+        }
+    }
+
+
+    /**
+     * 发送邮件
+     */
+    private void sendEmail() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_email_address, null);
+        final EditText et_email_address = view.findViewById(R.id.et_email_address);
+        Button btn_send_email = view.findViewById(R.id.btn_send_email);
+        final Dialog dialogEmail = DialogUtil.Dialog(this, true, view);
+        btn_send_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emailAdress = et_email_address.getText().toString().trim();
+                if (FormatUtil.isEmail(emailAdress)) {
+                    dialogEmail.dismiss();
+                    EmailUtil.sendEmail(emailAdress, "嗨，你好呀，" + phoneUtil.getModel());
+                    snkbar(rcyl_test, "已发送邮件至：" + emailAdress, Snackbar.LENGTH_SHORT);
+                } else {
+                    snkbar(rcyl_test, "请输入正确的邮箱", Snackbar.LENGTH_SHORT);
+                }
+            }
+        });
     }
 
 
