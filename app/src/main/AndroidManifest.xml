@@ -27,8 +27,8 @@
     <uses-permission android:name="android.permission.SENSORS" />
 
     <!-- 位置权限 -->
-    <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!-- 存储权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -87,6 +87,10 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+
     <application
         android:name="com.yorhp.tyhjlibrary.app.MyApplication"
         android:allowBackup="true"
@@ -107,6 +111,8 @@
             android:name="com.yorhp.tyhjlibrary.view.permisson.PermissionsActivity"
             android:theme="@style/NoTitleTranslucentTheme" />
 
+        <activity android:name="com.yorhp.tyhjlibrary.util.camera.TakeVideoCameraOne"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.yorhp.fileProvider"
@@ -120,6 +126,7 @@
         <activity android:name="com.yorhp.tyhjlibrary.util.camera.ShootVideoActivity_"/>
 
         <service android:name="com.yorhp.tyhjlibrary.util.camera.TakeVideoService"/>
+
 
     </application>
 
