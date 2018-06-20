@@ -31,7 +31,7 @@ public class TakeVideoService extends Service {
 
 
     private void takeVideo() {
-        final TakeVideoUtil takeVideoUtil=new TakeVideoUtil();
+        final TakeVideoUtil takeVideoUtil = new TakeVideoUtil();
         takeVideoUtil.setContext(this);
         takeVideoUtil.setmTextureView(videoFloat);
         takeVideoUtil.initCamera();
@@ -45,7 +45,7 @@ public class TakeVideoService extends Service {
                         @Override
                         public void run() {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                takeVideoUtil.startRecordingVideo(TakeVideoService.this,MyApplication.APP_BASE_DIR+"/movie/"+System.currentTimeMillis());
+                                takeVideoUtil.startRecordingVideo(TakeVideoService.this, MyApplication.APP_BASE_DIR + "/movie/" + System.currentTimeMillis());
                             }
                         }
                     });
@@ -76,20 +76,20 @@ public class TakeVideoService extends Service {
     }
 
 
-    public  void createFloatWindow(Context context) {
+    public void createFloatWindow(Context context) {
         WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
         WindowManager windowManager = getWindowManager(context);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            wmParams.type  = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            wmParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            wmParams.type  = WindowManager.LayoutParams.TYPE_PHONE;
+            wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
 
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags= WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
@@ -110,7 +110,7 @@ public class TakeVideoService extends Service {
         wmParams.width = 200;
         wmParams.height = 200;
 
-        videoFloat=new AutoFitTextureView(context);
+        videoFloat = new AutoFitTextureView(context);
         windowManager.addView(videoFloat, wmParams);
         takeVideo();
     }

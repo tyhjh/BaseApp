@@ -34,6 +34,8 @@ import com.yorhp.tyhjlibrary.util.email.EmailUtil;
 import com.yorhp.tyhjlibrary.util.file.FileUtil;
 import com.yorhp.tyhjlibrary.util.internet.InternetUtil;
 import com.yorhp.tyhjlibrary.util.phone.phoneUtil;
+import com.yorhp.tyhjlibrary.util.retrofite.MRetrofite;
+import com.yorhp.tyhjlibrary.util.retrofite.UploadApi;
 import com.yorhp.tyhjlibrary.util.sound.RecordUtil;
 import com.yorhp.tyhjlibrary.util.view.ImageUtil;
 import com.yorhp.tyhjlibrary.util.view.ScreenUtil;
@@ -60,6 +62,14 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
@@ -92,6 +102,8 @@ public class MainActivity extends BaseActivity {
     @ViewById
     Button btn_record;
 
+
+
     int state = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -108,11 +120,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         logTime = System.currentTimeMillis();
         //Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-        // startActivity(intent);
+        //startActivity(intent);
 
     }
 
@@ -155,12 +166,15 @@ public class MainActivity extends BaseActivity {
             nameList.add("后台录像工具测试");
             nameList.add("发送邮件测试");
             nameList.add("语音录制");
+            nameList.add("语音播放");
+            nameList.add("自定义快速拍照，摄像");
             nameList.add("界面切换动画测试");
             nameList.add("Activity元素共享测试");
             nameList.add("状态栏颜色测试");
             nameList.add("电话号码测试");
             nameList.add("视频播放器");
             nameList.add("语音播放");
+            nameList.add("retrofite测试");
             stringAdapter.update();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -241,7 +255,47 @@ public class MainActivity extends BaseActivity {
             case 17://语音播放
 
                 break;
+            case 18://自定义快速拍照，摄像
+                startActivity(new Intent(MainActivity.this,QuickCameraActivity_.class));
+                break;
+            case 25:
+                uploadFile();
+                break;
+
         }
+    }
+
+    //上传图片
+    private void uploadFile() {
+        UploadApi uploadApi= MRetrofite.getInstance().create(UploadApi.class);
+        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), new File(MyApplication.APP_BASE_DIR+"/test.gif"));
+        MultipartBody.Part part = MultipartBody.Part.createFormData("pictureFile", "pictureFile", body);
+
+        uploadApi.update("5fec43b4f8a34d6a9c0efed4953a6593","32345678",
+                "000000000001","201805170001",part)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtils.logJson(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.log(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
@@ -262,7 +316,7 @@ public class MainActivity extends BaseActivity {
         if (mPop != null) {
             return;
         }
-        final View view = View.inflate(this, R.layout.dialog_record, null);
+        final View view = View.inflate(this, com.yorhp.tyhjlibrary.R.layout.dialog_record, null);
         final ImageView mImageView = (ImageView) view.findViewById(R.id.zeffect_recordbutton_dialog_imageview);
         final TextView mTextView = (TextView) view.findViewById(R.id.zeffect_recordbutton_dialog_time_tv);
         mPop = new PopupWindowFactory(this, view);
@@ -477,7 +531,8 @@ public class MainActivity extends BaseActivity {
             toast("再次点击退出");
             return;
         }
-        MyApplication.closeAllActivity();
+        //MyApplication.closeAllActivity();
+        moveTaskToBack(true);
     }
 
 

@@ -61,8 +61,4 @@ public class ScreenUtil {
         return result;
     }
 
-
-
-
-
 }

@@ -35,7 +35,7 @@ public class MyApplication extends Application {
 
 
     //API
-    public static String BASEURL = "http://121.46.30.200:10081/mlstudio/";
+    public static String BASEURL = "http://10.0.0.73/communicate/";
 
 
     @Override

@@ -11,6 +11,8 @@
     
     <style name="Quick_start_Light" parent="Theme.AppCompat.Light">
         <item name="android:windowBackground">@drawable/img_start_bg</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>

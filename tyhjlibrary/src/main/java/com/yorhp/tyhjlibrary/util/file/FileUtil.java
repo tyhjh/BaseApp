@@ -70,10 +70,19 @@ public class FileUtil {
 
     //删除文件
     private static void deleteFilesByDirectory(File directory) {
-        if (directory != null && directory.exists() && directory.isDirectory()) {
-            for (File item : directory.listFiles()) {
-                item.delete();
+        if (directory != null && directory.exists()) {
+            if (directory.isDirectory()) {
+                for (File item : directory.listFiles()) {
+                    if (item.isDirectory()) {
+                        deleteFilesByDirectory(item);
+                    } else {
+                        item.delete();
+                    }
+                }
+            } else {
+                directory.delete();
             }
+
         }
     }
 
