@@ -16,11 +16,18 @@ public class MLiteOrm {
 
     private static String dataBaseName;
     private static Context context;
+    private static int dbVersion = 1;
+    private static boolean debug=false;
 
-    public static void initLiteOrm(Context context,String dataBaseName){
+
+    public static void initLiteOrm(Context context,String dataBaseName,int dbVersion,boolean debug){
         MLiteOrm.dataBaseName=dataBaseName;
         MLiteOrm.context=context;
+        MLiteOrm.dbVersion=dbVersion;
+        MLiteOrm.debug=debug;
     }
+
+
 
     public static LiteOrm getInstance() {
         if (instance == null) {
@@ -29,13 +36,13 @@ public class MLiteOrm {
                     DataBaseConfig config = new DataBaseConfig(context, dataBaseName + ".db");
                     //"liteorm.db"是数据库名称，名称里包含路径符号"/"则将数据库建立到该路径下，可以使用sd卡路径。 不包含则在系统默认路径下创建DB文件。
                     //例如 public static final String DB_NAME = SD_CARD + "/lite/orm/liteorm.db";     DataBaseConfig config = new DataBaseConfig(this, DB_NAME);
-                    config.dbVersion = 1; // set database version
+                    config.dbVersion = dbVersion; // set database version
                     config.onUpdateListener = null; // set database update listener
                     //独立操作，适用于没有级联关系的单表操作，
                     instance = LiteOrm.newSingleInstance(config);
                     //级联操作,适用于多表级联操作
                     // liteOrm=LiteOrm.newCascadeInstance(config);
-                    instance.setDebugged(MyApplication.ISDEBUG);
+                    instance.setDebugged(debug);
                 }
             }
         }
