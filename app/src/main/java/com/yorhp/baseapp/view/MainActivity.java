@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
     @ViewById
     MRecycleView rcyl_test;
 
-    @ViewById
+    @ViewById()
     Button btn_outlin;
 
 
@@ -139,6 +139,9 @@ public class MainActivity extends BaseActivity {
         });
         initData();
     }
+
+
+
 
 
     @Background
