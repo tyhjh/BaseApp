@@ -12,7 +12,6 @@ public class PermissonUtil {
 
     public static PermissionsChecker mPermissionsChecker; // 权限检测器
 
-
     public static boolean checkPermission(Activity activity, String... permissions){
         mPermissionsChecker=new PermissionsChecker(activity);
         // 缺少权限时, 进入权限配置页面

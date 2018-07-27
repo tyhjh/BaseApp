@@ -4,8 +4,6 @@ import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.DataBaseConfig;
-import com.yorhp.tyhjlibrary.R;
-import com.yorhp.tyhjlibrary.app.MyApplication;
 
 /**
  * Created by Tyhj on 2017/6/19.

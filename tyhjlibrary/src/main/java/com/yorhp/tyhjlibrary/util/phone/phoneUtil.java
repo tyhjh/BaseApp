@@ -192,6 +192,8 @@ public class phoneUtil {
         return result;
     }
 
+
+
     public static void getAppDetailSettingIntent(Context context) {
         Intent localIntent = new Intent();
         localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -205,6 +205,7 @@ public class MainActivity extends BaseActivity {
                 BottomFragment shareFragment = new BottomFragment();
                 ImageView imageView = new ImageView(this);
                 imageView.setImageResource(R.mipmap.ic_launcher);
+                imageView.setBackgroundColor(getResources().getColor(R.color.gainsboro));
                 shareFragment.setView(imageView);
                 shareFragment.show(this.getFragmentManager(), "ShareFragment");
                 break;
